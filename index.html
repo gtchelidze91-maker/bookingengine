@@ -2,53 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Travel Agency Booking Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Booking Engine</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f9ff; padding: 20px; }
-        .search-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #d1e3f8; display: flex; gap: 20px; flex-wrap: wrap; }
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        label { font-size: 12px; color: #555; }
-        select, input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f4f8; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+        .search-header { grid-column: 1 / -1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; }
+        .input-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 150px; }
+        label { font-size: 11px; font-weight: bold; color: #0056b3; text-transform: uppercase; }
+        select, input { padding: 10px; border: 1px solid #ced4da; border-radius: 5px; }
+        button#searchBtn { background-color: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .sidebar { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .results-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .hotel-card { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
-    <h2>Package Search</h2>
-    
-    <div class="search-container">
-        <div class="input-group">
-            <label>Departure location</label>
-            <select id="departure"><option>Tbilisi</option></select>
-        </div>
+    <div class="container">
+        <header class="search-header">
+            <div class="input-group"><label>Departure</label><select id="departure"><option>Tbilisi</option></select></div>
+            <div class="input-group"><label>Destination</label><select id="destination"><option>Turkey</option></select></div>
+            <div class="input-group"><label>Date</label><input type="date" id="depDate"></div>
+            <div class="input-group"><label>Nights</label><input type="number" value="7" id="nights"></div>
+            <button id="searchBtn">SEARCH</button>
+        </header>
 
-        <div class="input-group">
-            <label>Destination country</label>
-            <select id="destination"><option>Turkey</option></select>
-        </div>
+        <aside class="sidebar">
+            <strong>Filters</strong><br><br>
+            <label><input type="checkbox"> 5* Stars</label><br>
+            <label><input type="checkbox"> All Inclusive</label>
+        </aside>
 
-        <div class="input-group">
-            <label>Departure date</label>
-            <input type="date" id="travelDate">
-        </div>
-
-        <div class="input-group">
-            <label>Nights</label>
-            <input type="number" id="nights" value="7" min="1">
-        </div>
-
-        <div class="input-group">
-            <label>Adults</label>
-            <select id="adults"><option>1</option><option selected>2</option></select>
-        </div>
+        <main class="results-panel">
+            <h3 id="resultCount">Results (0)</h3>
+            <div id="hotelList">Click search to load offers...</div>
+        </main>
     </div>
 
     <script>
-    // 🏨 This is our "Hotel Vault"
-    const hotels = [
-        { name: "Crystal Palace Luxury", stars: "5*", board: "UAI", price: 1200, options: ["Aqua Park", "Beach Front"] },
-        { name: "Blue Garden Resort", stars: "4*", board
-    </script>
-    
+        // 🏨 Our initial data vault
+        const hotels = [
+            { name: "Crystal Palace Luxury", stars: "5*", board: "UAI", price: 1200 },
+            { name: "Blue Garden Resort", stars: "4*", board: "AI", price: 850 },
+            { name: "Sun & Sands Hotel", stars: "3*", board: "HB", price: 500 }
+        ];
 
+        // 🧠 Logic to display hotels
+        document.getElementById('searchBtn').onclick = function() {
+            const list = document.getElementById('hotelList');
+            list.innerHTML = ""; 
+            
+            hotels.forEach(h => {
+                const card = document.createElement('div');
+                card.className = 'hotel-card';
+                card.innerHTML = `<div><strong>${h.name}</strong> (${h.stars})<br>Board: ${h.board}</div><div style="color:green">$${h.price}</div>`;
+                list.appendChild(card);
+            });
+            
+            document.getElementById('resultCount').innerText = "Results (" + hotels.length + ")";
+        };
+    </script>
 </body>
 </html>
